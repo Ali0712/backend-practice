@@ -67,14 +67,14 @@
     },
     {
         "id": 12,
-        "title": "Test movie",
-        "year": 2024,
-        "genre": "Sci-fi, Space opera"
+        "title": "Test success",
+        "year": 2002,
+        "genre": "Sci"
     },
     {
         "id": 13,
         "title": "Test movie",
-        "year": 2024,
-        "genre": "Sci-fi, Space opera"
+        "year": 2002,
+        "genre": "comedy"
     }
 ]

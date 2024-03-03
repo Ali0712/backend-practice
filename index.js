@@ -46,6 +46,28 @@ app.post('/api/v1/movies', (req, res) => {
     })
 })
 
+// update a movie
+app.patch('/api/v1/movies/:id', (req, res) => {
+    const id = +req.params.id;
+    let movieToUpdate = movies.find(data => data.id === id);
+    if (!movieToUpdate) {
+        return res.status(404).json({
+            status: 'fail',
+            message: `movie with id = ${id} not found`
+        })
+    }
+
+    Object.assign(movieToUpdate, req.body);
+    const index = movies.indexOf(movieToUpdate);
+    movies[index] = movieToUpdate;
+    fs.writeFile('./data/movies.json', JSON.stringify(movies), (err) => {
+        res.status(200).json({
+            status: 'success',
+            data: { movie: movieToUpdate }
+        })
+    })
+
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
