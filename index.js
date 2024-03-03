@@ -56,7 +56,6 @@ app.patch('/api/v1/movies/:id', (req, res) => {
             message: `movie with id = ${id} not found`
         })
     }
-
     Object.assign(movieToUpdate, req.body);
     const index = movies.indexOf(movieToUpdate);
     movies[index] = movieToUpdate;
@@ -66,7 +65,6 @@ app.patch('/api/v1/movies/:id', (req, res) => {
             data: { movie: movieToUpdate }
         })
     })
-
 })
 
 app.listen(port, () => {
