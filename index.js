@@ -6,6 +6,13 @@ const port = 3000
 app.use(express.json())
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
 
+// middleware
+// const logger = (req, res, next) => {
+//     console.log('This is middleware')
+//     next()
+// }
+// app.use(logger)
+
 // get all movies
 const getAllMovies = (req, res) => {
     res.status(200).json({
