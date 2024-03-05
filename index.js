@@ -7,16 +7,16 @@ app.use(express.json())
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
 
 // get all movies
-app.get('/api/v1/movies', (req, res) => {
+const getAllMovies = (req, res) => {
     res.status(200).json({
         status: 'success',
         count: movies.length,
         data: { movies: movies }
     })
-})
+}
 
 // get movie by id
-app.get('/api/v1/movies/:id', (req, res) => {
+const getMovieByID = (req, res) => {
     const id = +req.params.id;
     const movie = movies.find(data => data.id === id);
     if (!movie) {
@@ -29,10 +29,10 @@ app.get('/api/v1/movies/:id', (req, res) => {
         status: 'success',
         data: { movie: movie }
     })
-})
+}
 
 // add new movie
-app.post('/api/v1/movies', (req, res) => {
+const addNewMovie = (req, res) => {
     const newID = movies[movies.length - 1].id + 1;
     const newMovie = Object.assign({ 'id': newID }, req.body)
     movies.push(newMovie)
@@ -42,10 +42,10 @@ app.post('/api/v1/movies', (req, res) => {
             data: { movie: newMovie }
         })
     })
-})
+}
 
 // update a movie
-app.patch('/api/v1/movies/:id', (req, res) => {
+const updateMovie = (req, res) => {
     const id = +req.params.id;
     let movieToUpdate = movies.find(data => data.id === id);
     if (!movieToUpdate) {
@@ -63,16 +63,16 @@ app.patch('/api/v1/movies/:id', (req, res) => {
             data: { movie: movieToUpdate }
         })
     })
-})
+}
 
 // delete a movie
-app.delete('/api/v1/movies/:id', (req, res) => {
+const deleteMovie = (req, res) => {
     const id = +req.params.id;
     const movieToDelete = movies.find(data => data.id === id);
     if (!movieToDelete){
         return res.status(404).json({
-          status : 'fail', 
-          message : `movie with id = ${id} not found` 
+            status : 'fail', 
+            message : `movie with id = ${id} not found` 
         })
     }
     
@@ -84,7 +84,24 @@ app.delete('/api/v1/movies/:id', (req, res) => {
             data : { movie : null }
         })
     })
-})
+}
+
+//  Route handlers
+// app.get('/api/v1/movies', getAllMovies)
+// app.get('/api/v1/movies/:id', getMovieByID)
+// app.post('/api/v1/movies', addNewMovie)
+// app.patch('/api/v1/movies/:id', updateMovie)
+// app.delete('/api/v1/movies/:id', deleteMovie)
+
+//  Route chaining
+app.route('/api/v1/movies')
+    .get(getAllMovies)
+    .post(addNewMovie)
+
+app.route('/api/v1/movies/:id')
+    .get(getMovieByID)
+    .patch(updateMovie)
+    .delete(deleteMovie)
 
 
 app.listen(port, () => {
