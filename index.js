@@ -27,9 +27,7 @@ app.get('/api/v1/movies/:id', (req, res) => {
     }
     res.status(200).json({
         status: 'success',
-        data: {
-            movie: movie
-        }
+        data: { movie: movie }
     })
 })
 
@@ -66,6 +64,28 @@ app.patch('/api/v1/movies/:id', (req, res) => {
         })
     })
 })
+
+// delete a movie
+app.delete('/api/v1/movies/:id', (req, res) => {
+    const id = +req.params.id;
+    const movieToDelete = movies.find(data => data.id === id);
+    if (!movieToDelete){
+        return res.status(404).json({
+          status : 'fail', 
+          message : `movie with id = ${id} not found` 
+        })
+    }
+    
+    const index = movies.indexOf(movieToDelete);
+    movies.splice(index, 1);
+    fs.writeFile('./data/movies.json', JSON.stringify(movies), (err)=>{
+        res.status(204).json({
+            status : 'success',
+            data : { movie : null }
+        })
+    })
+})
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
