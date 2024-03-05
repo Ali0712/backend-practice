@@ -1,20 +1,9 @@
-const express = require('express')
 const fs = require('fs')
-const app = express()
-const port = 3000
 
-app.use(express.json())
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
 
-// middleware
-// const logger = (req, res, next) => {
-//     console.log('This is middleware')
-//     next()
-// }
-// app.use(logger)
-
 // get all movies
-const getAllMovies = (req, res) => {
+exports.getAllMovies = (req, res) => {
     res.status(200).json({
         status: 'success',
         count: movies.length,
@@ -23,7 +12,7 @@ const getAllMovies = (req, res) => {
 }
 
 // get movie by id
-const getMovieByID = (req, res) => {
+exports.getMovieByID = (req, res) => {
     const id = +req.params.id;
     const movie = movies.find(data => data.id === id);
     if (!movie) {
@@ -39,7 +28,7 @@ const getMovieByID = (req, res) => {
 }
 
 // add new movie
-const addNewMovie = (req, res) => {
+exports.addNewMovie = (req, res) => {
     const newID = movies[movies.length - 1].id + 1;
     const newMovie = Object.assign({ 'id': newID }, req.body)
     movies.push(newMovie)
@@ -52,7 +41,7 @@ const addNewMovie = (req, res) => {
 }
 
 // update a movie
-const updateMovie = (req, res) => {
+exports.updateMovie = (req, res) => {
     const id = +req.params.id;
     let movieToUpdate = movies.find(data => data.id === id);
     if (!movieToUpdate) {
@@ -73,7 +62,7 @@ const updateMovie = (req, res) => {
 }
 
 // delete a movie
-const deleteMovie = (req, res) => {
+exports.deleteMovie = (req, res) => {
     const id = +req.params.id;
     const movieToDelete = movies.find(data => data.id === id);
     if (!movieToDelete){
@@ -92,29 +81,3 @@ const deleteMovie = (req, res) => {
         })
     })
 }
-
-//  Route handlers
-// app.get('/api/v1/movies', getAllMovies)
-// app.get('/api/v1/movies/:id', getMovieByID)
-// app.post('/api/v1/movies', addNewMovie)
-// app.patch('/api/v1/movies/:id', updateMovie)
-// app.delete('/api/v1/movies/:id', deleteMovie)
-
-// Router middleware
-const myRouter = express.Router()
-
-//  Route chaining
-myRouter.route('/')
-    .get(getAllMovies)
-    .post(addNewMovie)
-
-myRouter.route('/:id')
-    .get(getMovieByID)
-    .patch(updateMovie)
-    .delete(deleteMovie)
-
-app.use('/api/v1/movies', myRouter)
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
