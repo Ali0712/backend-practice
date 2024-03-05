@@ -100,16 +100,20 @@ const deleteMovie = (req, res) => {
 // app.patch('/api/v1/movies/:id', updateMovie)
 // app.delete('/api/v1/movies/:id', deleteMovie)
 
+// Router middleware
+const myRouter = express.Router()
+
 //  Route chaining
-app.route('/api/v1/movies')
+myRouter.route('/')
     .get(getAllMovies)
     .post(addNewMovie)
 
-app.route('/api/v1/movies/:id')
+myRouter.route('/:id')
     .get(getMovieByID)
     .patch(updateMovie)
     .delete(deleteMovie)
 
+app.use('/api/v1/movies', myRouter)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
