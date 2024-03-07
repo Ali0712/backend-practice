@@ -4,6 +4,7 @@ const movieRouter = require('./routes/movieRoutes');
 const app = express()
 
 app.use(express.json())
+app.use(express.static('./public'))
 
 // Middleware
 // const logger = (req, res, next) => {
