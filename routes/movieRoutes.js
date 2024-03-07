@@ -8,7 +8,7 @@ router.param('id', moviesController.checkID)
 //  Route chaining
 router.route('/')
     .get(moviesController.getAllMovies)
-    .post(moviesController.addNewMovie)
+    .post(moviesController.validateBody, moviesController.addNewMovie)
 
 router.route('/:id')
     .get(moviesController.getMovieByID)

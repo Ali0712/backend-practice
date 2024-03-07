@@ -2,13 +2,24 @@ const fs = require('fs')
 
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
 
-
+//  middleware function for checking id of movie
 exports.checkID = (req, res, next, value) => {
     const movie = movies.find(data => data.id === +value);
     if (!movie) {
         return res.status(404).json({
             status: 'fail',
             message: `movie with id = ${value} not found`
+        })
+    }
+    next();
+}
+
+// middleware function for checking body of request
+exports.validateBody = (req, res, next) => {
+    if (!req.body.title || !req.body.year){
+        return res.status(400).json({
+            status : 'fail',
+            message : 'not a valid movie data'
         })
     }
     next();
